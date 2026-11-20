@@ -16,7 +16,7 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    files: ["components/ui/**"],
+    files: ["src/components/ui/**"],
     rules: {
       "shadcn/no-restyle": "off",
       "shadcn/no-arbitrary-values": "off",
