@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "boundaries": {
+    "zones": [
+      { "name": "app", "patterns": ["src/app/**"] },
+      {
+        "name": "features",
+        "patterns": ["src/features/**"],
+        "autoDiscover": ["src/features"]
+      },
+      { "name": "shared", "patterns": ["src/shared/**"] }
+    ],
+    "rules": [
+      { "from": "app", "allow": ["features", "shared"] },
+      { "from": "features", "allow": ["shared"] },
+      { "from": "shared", "allow": [] }
+    ]
+  }
+}
