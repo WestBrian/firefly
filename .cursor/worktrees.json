@@ -1,0 +1,10 @@
+{
+  "setup-worktree-unix": [
+    "if [ -f \"$ROOT_WORKTREE_PATH/.env.local\" ] && [ ! -e .env.local ] && [ ! -L .env.local ]; then cp \"$ROOT_WORKTREE_PATH/.env.local\" .env.local; fi",
+    "npm ci"
+  ],
+  "setup-worktree-windows": [
+    "if ((Test-Path -LiteralPath \"$env:ROOT_WORKTREE_PATH\\.env.local\" -PathType Leaf) -and !(Test-Path -LiteralPath \".env.local\")) { Copy-Item -LiteralPath \"$env:ROOT_WORKTREE_PATH\\.env.local\" -Destination \".env.local\" }",
+    "npm ci"
+  ]
+}
