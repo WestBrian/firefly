@@ -40,13 +40,14 @@ const eslintConfig = defineConfig([
       "shadcn/no-arbitrary-values": "off",
     },
   },
-  // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Convex CLI-generated files.
+    "convex/_generated/**",
   ]),
 ]);
 
