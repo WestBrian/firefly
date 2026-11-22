@@ -3,10 +3,17 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import tseslint from "typescript-eslint";
+import envExample from "./eslint/env-example.mts";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    files: [".env.example"],
+    plugins: { "env-example": envExample },
+    processor: "env-example/dotenv",
+    rules: { "env-example/layout": "error" },
+  },
   {
     files: ["src/**/*.{ts,tsx,mts}"],
     extends: [tseslint.configs.recommendedTypeChecked],
