@@ -2,3 +2,7 @@
 command = "npx"
 args = ["--yes", "shadcn@latest", "mcp"]
 startup_timeout_sec = 60
+
+[mcp_servers.convex]
+command = "npx"
+args = ["--no", "--", "convex", "mcp", "start", "--project-dir", "."]

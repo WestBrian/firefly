@@ -3,6 +3,17 @@
     "shadcn": {
       "command": "npx",
       "args": ["--yes", "shadcn@latest", "mcp"]
+    },
+    "convex": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/node_modules/convex/bin/main.js",
+        "mcp",
+        "start",
+        "--project-dir",
+        "${workspaceFolder}"
+      ]
     }
   }
 }
