@@ -8,12 +8,32 @@
         "patterns": ["src/features/**"],
         "autoDiscover": ["src/features"]
       },
-      { "name": "shared", "patterns": ["src/shared/**"] }
+      { "name": "shared", "patterns": ["src/shared/**"] },
+      { "name": "domain", "patterns": ["src/domain/**"] },
+      { "name": "source", "patterns": ["src/**"] },
+      { "name": "convex-generated", "patterns": ["convex/_generated/**"] },
+      { "name": "convex", "patterns": ["convex/**"] },
+      { "name": "eslint", "patterns": ["eslint/**"] },
+      { "name": "eslint-config", "patterns": ["eslint.config.mjs"] },
+      { "name": "other", "patterns": ["**"] }
     ],
     "rules": [
-      { "from": "app", "allow": ["features", "shared"] },
-      { "from": "features", "allow": ["shared"] },
-      { "from": "shared", "allow": [] }
+      {
+        "from": "app",
+        "allow": ["features", "shared", "domain", "source", "convex-generated"]
+      },
+      {
+        "from": "features",
+        "allow": ["shared", "domain", "source", "convex-generated"]
+      },
+      { "from": "shared", "allow": ["source"] },
+      { "from": "domain", "allow": [] },
+      { "from": "source", "allow": [] },
+      { "from": "convex-generated", "allowTypeOnly": ["convex"] },
+      { "from": "convex", "allow": ["domain", "convex-generated"] },
+      { "from": "eslint", "allow": [] },
+      { "from": "eslint-config", "allow": ["eslint"] },
+      { "from": "other", "allow": [] }
     ]
   }
 }
