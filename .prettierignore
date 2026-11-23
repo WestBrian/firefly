@@ -7,5 +7,8 @@
 /next-env.d.ts
 /package-lock.json
 
-/.agents/skills/
-/.claude/skills/
+# Agent skill/tooling trees (not app source)
+/.agents/
+/.claude/
+/.codex/
+/.cursor/
