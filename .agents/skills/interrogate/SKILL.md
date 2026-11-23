@@ -39,7 +39,7 @@ Skip arena Phases C, D, and E. Adversaries find different failures, so the verdi
 
 ## Models
 
-Role defaults, stamped from `plugins/pstack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the `pstack-models.md` override sheet overrides each at runtime; `/setup-pstack` writes it and lists its path per runtime.
+Role defaults, stamped from `plugins/pstack/models.json` (edit there, rerun `tools/generate.mjs`). A matching role line in the current-runtime section of `.agents/pstack-models.md` (`## cursor` or `## codex`) overrides each at runtime; `/setup-pstack` writes that project file.
 
 - interrogate reviewers: `opus`, `fable`, `sonnet`, `haiku`
 

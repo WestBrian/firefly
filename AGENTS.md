@@ -21,3 +21,9 @@ Convex agent skills for common tasks can be installed by running
 `npx convex ai-files install`.
 
 <!-- convex-ai-end -->
+
+## pstack models
+
+Per-role model overrides for pstack skills live in [`.agents/pstack-models.md`](.agents/pstack-models.md). Read that file before spawning role-model subagents (`arena`, `swarm`, `interrogate`, `thermos`, `no-comments`, and poteto-mode code/judgment roles). `/setup-pstack` writes and updates it.
+
+This repo uses a skills-only pstack install (no SessionStart routing hook). The sheet has harness sections: use `## cursor` when running in Cursor, and `## codex` when running in Codex. Do not use the other section's slugs.

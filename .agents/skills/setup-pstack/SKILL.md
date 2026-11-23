@@ -1,6 +1,6 @@
 ---
 name: setup-pstack
-description: Configure which models pstack uses per role. Detects available models and writes the current runtime's override sheet. Use for /setup-pstack, "configure pstack models", changing pstack's model choices, or turning the SessionStart hook on or off.
+description: Configure which models pstack uses per role. Detects available models and writes the project sheet at `.agents/pstack-models.md`. Use for /setup-pstack, "configure pstack models", changing pstack's model choices, or turning the SessionStart hook on or off.
 ---
 
 # Setup pstack
@@ -13,29 +13,21 @@ On Muse, read the [platform mapping](../poteto-mode/references/muse-tools.md), i
 
 On Antigravity, read the [platform mapping](../poteto-mode/references/agy-tools.md), including its per-skill notes, before following this skill.
 
-Write the current runtime's per-role model override sheet. Each pstack skill names a default model inline; the override sheet adapts those defaults to the models you actually have access to.
+Write the project's per-role model override sheet at `.agents/pstack-models.md` in the repository root (`git rev-parse --show-toplevel` when needed; outside a repository, the workspace root). Each pstack skill names a default model inline; the override sheet adapts those defaults to the models you actually have access to. Root `AGENTS.md` points agents at this file; commit it with the repository so every runtime in the project shares the same choices.
 
-On any runtime other than Claude Code, read [Other runtimes](references/runtimes.md) first. Its table gives the sheet path, how the sheet loads, and how to list models, and your runtime's section says which steps change. The rest of this file describes Claude Code.
-
-On Claude Code the config directory is `$CLAUDE_CONFIG_DIR` when that variable is set and `~/.claude` otherwise. This skill calls it `<config>`, and the user sheet is `<config>/pstack-models.md`. A project sheet, `.claude/pstack-models.md` at the repository root (`git rev-parse --show-toplevel`; outside a repository, the directory Claude Code starts in), is committed with the repository and replaces the user sheet in that project. The session hook reads it whenever it exists. The model rows defer to it through the line step 6 writes under its heading, so a hand-written project sheet needs that line too. Claude Code has no auto-applied "rules" mechanism like Cursor's `.mdc`, so inclusion is explicit: the user adds a line to `<config>/CLAUDE.md` such as:
-
-```text
-@<config>/pstack-models.md
-```
-
-with `<config>` written as the resolved path, so the file is loaded as context for every session. A project sheet loads from `@.claude/pstack-models.md` in the `CLAUDE.md` at the repository root.
+On any runtime, read [Other runtimes](references/runtimes.md) for how models are listed and which steps change for that host. The sheet path is always `.agents/pstack-models.md`.
 
 ## Steps
 
 ### 1. Detect available models
 
-Enumerate the model names the `Agent` tool's `model` parameter accepts in this session. That is the dependable source. On Claude Code they are the family names listed in [Models](#models) below, each running that family's current model, and a full model ID is rejected. The default panel is listed there too. The panel is chosen for cross-family diversity. Ask the user to confirm or paste any additional slugs they want available. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs. Both mean the role runs on the parent session's model, which the `Agent` call expresses by omitting `model`.
+Enumerate the model names the subagent dispatch tool accepts in this session (on Claude Code, the `Agent` tool's `model` parameter). That is the dependable source. On Claude Code they are the family names listed in [Models](#models) below, each running that family's current model, and a full model ID is rejected. The default panel is listed there too. The panel is chosen for cross-family diversity. Ask the user to confirm or paste any additional slugs they want available. Never write a real slug you have not confirmed is available. The aliases `inherit-parent` and `auto` are always valid even though they are not detected slugs. Both mean the role runs on the parent session's model, which the dispatch omits `model`.
 
 ### 2. Load current state
 
-On Claude Code, first ask whether to configure the user sheet, for every project, or the project sheet, for this repository on any machine. The rest of the steps use the chosen sheet.
+Resolve the repository root and read `.agents/pstack-models.md` there if it exists. Treat its role lines as the current choices.
 
-The default role-to-model mapping is the rule shape shown in the Write the override sheet step below. If the current runtime's sheet already exists, read it and treat its values as the current choices. Otherwise start from those defaults. A line whose role is not in that shape, such as `how critics`, `architect runners`, `reflect tooling`, or `why investigators`, is from a retired role. Drop it. An older sheet may name full model IDs that start with `claude-`, which the `Agent` tool rejects. Replace each with its family name, the word after `claude-`.
+The default role-to-model mapping is the rule shape shown in the Write the override sheet step below. If the file is missing, start from those defaults. A line whose role is not in that shape, such as `how critics`, `architect runners`, `reflect tooling`, or `why investigators`, is from a retired role. Drop it. An older sheet may name full model IDs that start with `claude-`, which the Claude Code `Agent` tool rejects. Replace each with its family name, the word after `claude-`. On runtimes named in [Other runtimes](references/runtimes.md), follow that file's step-2 notes when they differ.
 
 ### 3. Map and confirm
 
@@ -45,7 +37,7 @@ Then ask for the default reasoning effort, the `default effort` line. It is `ses
 
 ### 4. Choose whether the session hook routes tasks
 
-On Claude Code, the plugin's `SessionStart` hook injects the poteto-mode mandate on startup, resume, clear, and compact. Ask whether to keep the hook. The default is on. The answer is the `session hook` line in the current runtime's sheet: `on` or `off`. With no sheet or no line, the hook injects. The line is inert on other runtimes without a pstack routing hook. An environment that sets `PSTACK_SESSION_HOOK=off` keeps the hook off whatever the sheet says. A Claude Code cloud session (`CLAUDE_CODE_REMOTE=true`) starts with an empty home, so a user sheet written there does not reach the next session. To keep the hook off there, tell the user to set `PSTACK_SESSION_HOOK=off` in the cloud environment's settings or to commit a project sheet.
+Where the runtime has a pstack `SessionStart` hook (see [Other runtimes](references/runtimes.md)), ask whether to keep it. The default is on. The answer is the `session hook` line in `.agents/pstack-models.md`: `on` or `off`. With no sheet or no line, the hook injects. An environment that sets `PSTACK_SESSION_HOOK=off` keeps the hook off whatever the sheet says. A Claude Code cloud session (`CLAUDE_CODE_REMOTE=true`) starts with an empty home; commit the project sheet so the next session still loads it, or set `PSTACK_SESSION_HOOK=off` in the cloud environment when you want the hook off there.
 
 ### 5. Validate
 
@@ -53,12 +45,14 @@ Every real slug written must be in the detected set. `inherit-parent` and `auto`
 
 ### 6. Write the override sheet
 
-Write the current runtime's sheet with the shape below. Overwrite the whole file so re-runs stay idempotent. A project sheet also gets this line under its heading, so a session that loads both sheets knows which one counts: `This project's sheet. In this repository it replaces the user's pstack-models.md; ignore that sheet's lines.`
+Write `.agents/pstack-models.md` at the repository root with the shape below. Overwrite the whole file so re-runs stay idempotent. Under the heading, include:
+
+`This project's sheet at .agents/pstack-models.md. Per-role model overrides for this repository; commit it so every runtime loads the same choices.`
 
 ```markdown
 # pstack model configuration
 
-Per-role model overrides for pstack skills. Each pstack SKILL.md names its defaults in a Models section; the values here override those defaults. Delete a line to fall back to the skill default. A value of `inherit-parent` or `auto` runs that role on the parent session's model (the `Agent` call omits `model`); an alias entry in a panel list still counts toward that panel's fan-out. A model may carry a reasoning effort, as in `opus @xhigh` (levels: low, medium, high, xhigh, max); the role's subagent then runs at that level, each entry of a panel list on its own. `default effort` sets the level for a value without one; `session` uses the runtime's platform mapping to start from the parent session's effort. On Codex this requires active-turn metadata or an explicit effort choice. `session hook: off` stops the supported runtime's pstack routing hook from injecting the poteto-mode mandate; any other value, or no line, leaves it on unless the environment sets `PSTACK_SESSION_HOOK=off`.
+Per-role model overrides for pstack skills. Each pstack SKILL.md names its defaults in a Models section; the values here override those defaults. Delete a line to fall back to the skill default. A value of `inherit-parent` or `auto` runs that role on the parent session's model (the dispatch omits `model`); an alias entry in a panel list still counts toward that panel's fan-out. A model may carry a reasoning effort, as in `opus @xhigh` (levels: low, medium, high, xhigh, max); the role's subagent then runs at that level, each entry of a panel list on its own. `default effort` sets the level for a value without one; `session` uses the runtime's platform mapping to start from the parent session's effort. On Codex this requires active-turn metadata or an explicit effort choice. `session hook: off` stops the supported runtime's pstack routing hook from injecting the poteto-mode mandate; any other value, or no line, leaves it on unless the environment sets `PSTACK_SESSION_HOOK=off`.
 
 feature, refactoring: sonnet
 bug-fix: opus
@@ -77,13 +71,15 @@ default effort: session
 session hook: on
 ```
 
+On GitHub Copilot, follow [copilot.md](copilot.md) for the sheet header and role-line values; still write `.agents/pstack-models.md`.
+
 ### 7. Wire it in
 
-On Claude Code, if `<config>/CLAUDE.md` does not already include `<config>/pstack-models.md`, append an `@` line naming the sheet's resolved path, such as `@~/.claude/pstack-models.md`, so the model rows load on every session. For a project sheet, append `@.claude/pstack-models.md` to the `CLAUDE.md` at the repository root instead, if it is not there, and tell the user to commit both files.
+Open `AGENTS.md` at the repository root. If it does not already mention `.agents/pstack-models.md`, append a short pointer like the existing line that tells agents to read that file before spawning role-model subagents and that `/setup-pstack` maintains it. Do not write per-runtime home sheets or `@` include lines for model rows elsewhere.
 
 ### 8. Confirm
 
-Tell the user where the override was written, how its model rows load, and whether the plugin hook is on. When `PSTACK_SESSION_HOOK` is `off` in the environment, say that it keeps the hook off over the sheet. Re-running this skill updates the override sheet.
+Tell the user the sheet is `.agents/pstack-models.md`, that root `AGENTS.md` points agents at it, how role lines load on this runtime (see [Other runtimes](references/runtimes.md)), and whether the plugin hook is on. When `PSTACK_SESSION_HOOK` is `off` in the environment, say that it keeps the hook off over the sheet. Re-running this skill updates the same project file.
 
 ### 9. Offer a verification skill (optional)
 

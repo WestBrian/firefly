@@ -16,7 +16,7 @@ Copilot's `ask_user` takes one question per call with a fixed choice list. That 
 
 ## Current state
 
-On Copilot, step 2's saved values are the role lines the plugin hook put in context. When the context says this Copilot home has no pstack model sheet yet, or that the sheet is invalid, there are none. Read the sheet only when none of these is in context, as in a skills-only install. Do not test for the sheet or its directory with `bash`. Each such command touches a path outside the workspace and asks for access. `${COPILOT_HOME:-~/.copilot}` exists whenever Copilot runs, so do not create it.
+On Copilot, step 2's saved values are the role lines the plugin hook put in context from `.agents/pstack-models.md`. When the context says the project has no pstack model sheet yet, or that the sheet is invalid, there are none. Otherwise read `.agents/pstack-models.md` at the repository root (`git rev-parse --show-toplevel` when needed). Do not read or write per-runtime home sheets.
 
 ## Sheet header
 
@@ -25,7 +25,7 @@ A Copilot sheet uses step 6's role lines and settings under this header in place
 ```markdown
 # pstack model configuration
 
-Per-role model choices for pstack skills on GitHub Copilot, written by setup-pstack. Every role keeps its line; rerun setup-pstack to change one. A value of `inherit-parent` or `auto` runs that role on the parent session's model (the `task` call omits `model`); an alias entry in a panel list still counts toward that panel's fan-out. A model may carry a reasoning effort, as in `gpt-5.5 @xhigh` (levels: low, medium, high, xhigh, max), which the `task` call passes as `reasoning_effort`. `default effort` sets the level for a value without one; `session` keeps the parent session's effort. `session hook: off` stops the SessionStart hook from injecting the poteto-mode mandate; any other value, or no line, leaves it on. `panel vendors: any` records that the user kept a panel whose models come from one vendor.
+This project's sheet at .agents/pstack-models.md. Per-role model choices for pstack skills on GitHub Copilot, written by setup-pstack. Every role keeps its line; rerun setup-pstack to change one. A value of `inherit-parent` or `auto` runs that role on the parent session's model (the `task` call omits `model`); an alias entry in a panel list still counts toward that panel's fan-out. A model may carry a reasoning effort, as in `gpt-5.5 @xhigh` (levels: low, medium, high, xhigh, max), which the `task` call passes as `reasoning_effort`. `default effort` sets the level for a value without one; `session` keeps the parent session's effort. `session hook: off` stops the SessionStart hook from injecting the poteto-mode mandate; any other value, or no line, leaves it on. `panel vendors: any` records that the user kept a panel whose models come from one vendor.
 ```
 
 ## Detect models
@@ -73,16 +73,16 @@ The panel from questions 4 through 6 writes every panel role, in slot order. On 
 
 ## Write and check
 
-Validate as step 5 describes. Copilot's file tools expand neither `~` nor variables, so print the sheet's absolute path with `echo "${COPILOT_HOME:-$HOME/.copilot}/pstack-models.md"` in `bash`, and write the whole sheet to exactly that path in one tool call, so the write asks for path access at most once.
+Validate as step 5 describes. Write the whole sheet to `.agents/pstack-models.md` at the repository root in one in-repo tool call.
 
-Then run `sh <this skill's directory>/scripts/check-sheet.sh` through `bash`, with the directory's absolute path and no arguments. It checks the Copilot sheet as the plugin hook does at session start: every role has a line, every entry is `inherit-parent`, `auto`, or a model ID with an optional `@<level>`, and each panel names models from two vendors unless the sheet has `panel vendors: any`. It prints `sheet ok`, or `sheet invalid:` and each problem. On `sheet invalid`, fix those lines and write the whole sheet again, then rerun the check. The plugin hook approves the check without a prompt.
+Then run `sh <this skill's directory>/scripts/check-sheet.sh` through `bash`, passing the absolute path to `.agents/pstack-models.md` when the default would not resolve the repo root. It checks the sheet as the plugin hook does at session start: every role has a line, every entry is `inherit-parent`, `auto`, or a model ID with an optional `@<level>`, and each panel names models from two vendors unless the sheet has `panel vendors: any`. It prints `sheet ok`, or `sheet invalid:` and each problem. On `sheet invalid`, fix those lines and write the whole sheet again, then rerun the check.
 
-For the rest of this session, use the values you just wrote; do not read the sheet back. Later sessions get them from the plugin hook and do not ask again.
+For the rest of this session, use the values you just wrote; do not read the sheet back. Later sessions get them from the plugin hook and `AGENTS.md`.
 
 ## Wire it in
 
-Add no include line: Copilot does not expand `@~/` paths in user instructions, and the plugin hook injects the sheet's role lines at session start. If the hook is on but this session's context lacks the routing mandate (the block that opens `You have pstack.`), another hook or a skills-only install has displaced it. Offer to append this standing instruction to `~/.copilot/copilot-instructions.md` instead:
+Follow step 7 in [setup-pstack](SKILL.md): ensure root `AGENTS.md` mentions `.agents/pstack-models.md`. Add no Copilot-home include line. If the hook is on but this session's context lacks the routing mandate (the block that opens `You have pstack.`), another hook or a skills-only install has displaced it. Offer to append this standing instruction to `~/.copilot/copilot-instructions.md` instead:
 
 ```text
-pstack: for a task that touches more than one file, changes a signature other files call, involves a design choice, or is a bug with an unknown cause or a performance issue, load the poteto-mode skill and follow it. Resolve Claude tool and model names through poteto-mode's references/copilot-tools.md; role models are in ~/.copilot/pstack-models.md.
+pstack: for a task that touches more than one file, changes a signature other files call, involves a design choice, or is a bug with an unknown cause or a performance issue, load the poteto-mode skill and follow it. Resolve Claude tool and model names through poteto-mode's references/copilot-tools.md; role models are in .agents/pstack-models.md in each project.
 ```

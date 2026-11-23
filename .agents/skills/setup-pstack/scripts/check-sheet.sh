@@ -4,10 +4,18 @@
 # names models from two vendors unless the sheet has `panel vendors: any`.
 # Prints `sheet ok`, or `sheet invalid: <problems>` and exits 1.
 # Usage: check-sheet.sh [sheet]
-# The default sheet is GitHub Copilot's, so setup-pstack can run this without
-# naming a path outside the workspace.
+# Default sheet: .agents/pstack-models.md at the git repository root.
 set -eu
-sheet=${1:-${COPILOT_HOME:-$HOME/.copilot}/pstack-models.md}
+if [ $# -ge 1 ]; then
+  sheet=$1
+else
+  root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  if [ -n "$root" ]; then
+    sheet="$root/.agents/pstack-models.md"
+  else
+    sheet=".agents/pstack-models.md"
+  fi
+fi
 if [ ! -f "$sheet" ] || [ ! -r "$sheet" ]; then
   echo "sheet invalid: cannot read $sheet"
   exit 1

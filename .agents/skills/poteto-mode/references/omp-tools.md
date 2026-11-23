@@ -30,7 +30,7 @@ Use the OMP session's available browser or project verification tools to drive a
 
 ## Model names
 
-OMP uses its own model selection; without a pstack sheet, use the runtime's defaults. The global `~/.omp/pstack-models.md` is shared across OMP profiles; `session hook: off` there disables main-session routing while retaining the subagent mapping. Configure models only when the user asks. List available chat models with `omp models --kind chat` and inspect the active OMP configuration with `omp config`. Ask which available models the user wants for routine, worker and demanding roles. Configure OMP's own `modelRoles` and `task.agentModelOverrides` through its configuration interface, preserving unrelated settings. Use only models listed by the active installation; do not copy Claude model aliases into OMP. If the available agent roster cannot select distinct models for a requested panel, report that limitation.
+OMP uses its own model selection; without a pstack sheet, use the runtime's defaults. Role overrides live in `.agents/pstack-models.md` at the repository root; `session hook: off` there disables main-session routing while retaining the subagent mapping. Configure models only when the user asks. List available chat models with `omp models --kind chat` and inspect the active OMP configuration with `omp config`. Ask which available models the user wants for routine, worker and demanding roles. Configure OMP's own `modelRoles` and `task.agentModelOverrides` through its configuration interface, preserving unrelated settings. Use only models listed by the active installation; do not copy Claude model aliases into OMP. If the available agent roster cannot select distinct models for a requested panel, report that limitation.
 
 ## Per-skill notes
 

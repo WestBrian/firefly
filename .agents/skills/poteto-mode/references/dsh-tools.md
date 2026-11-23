@@ -48,4 +48,4 @@ DSH selects providers, models, and reasoning efforts through its current deploym
 
 Roles used by `arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos` are prompt responsibilities, not DSH model IDs or built-in agent types. Diverse-model panels (`arena`, `interrogate`) require distinct available model families; report when that is unavailable. Do not manufacture diversity by relabeling the same model.
 
-This skills-only integration has no automatic per-role sheet reader. `setup-pstack` uses the native delegation defaults, as its Other runtimes table describes.
+This skills-only integration has no automatic per-role sheet reader. Read `.agents/pstack-models.md` before role-model skills; `/setup-pstack` writes that file.

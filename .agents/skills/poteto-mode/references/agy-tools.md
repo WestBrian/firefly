@@ -40,7 +40,7 @@ poteto-mode's Subagents section sets Claude-specific defaults (`subagent_type: "
 
 Skills name Claude Code model aliases in their Models sections. On Antigravity (`agy`), `invoke_subagent`'s `Model` parameter accepts `inherit` (default, uses the parent's model), `flash_lite`, `flash`, and `pro`.
 
-- The model sheet is `~/.gemini/config/pstack-models.md`. Before a skill that needs a role model (`arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos`), read it. With no sheet, read `setup-pstack`'s `SKILL.md` and finish it first.
+- The model sheet is `.agents/pstack-models.md` at the repository root. Before a skill that needs a role model (`arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos`), read it. With no sheet, read `setup-pstack`'s `SKILL.md` and finish it first.
 - Pass the role's model as `Model` on `invoke_subagent`. For `inherit-parent` or `auto`, omit `Model`.
 - Roles that default to the worker model (`feature, refactoring`): the worker model the user chose.
 - Roles that default to the strongest model (`strongest judgment`): the strongest model the user chose.
@@ -50,7 +50,7 @@ Skills name Claude Code model aliases in their Models sections. On Antigravity (
 
 ## Session routing hook
 
-Antigravity runs the plugin's `SessionStart` hook when a new session starts. The hook outputs an `injectSteps` `systemMessage` JSON payload containing the Antigravity routing mandate unless `~/.gemini/config/pstack-models.md` contains `session hook: off`.
+Antigravity runs the plugin's `SessionStart` hook when a new session starts. The hook outputs an `injectSteps` `systemMessage` JSON payload containing the Antigravity routing mandate unless `.agents/pstack-models.md` in the repository contains `session hook: off`.
 
 ## Driver and bundled skills pstack references
 
@@ -72,7 +72,7 @@ Most skills need only the tables above. These need one more mapping:
 | Skill | On Antigravity |
 |-------|----------------|
 | `interrogate` | Each adversary is an `invoke_subagent` call with `Model` from the sheet. |
-| `setup-pstack` | The [Other runtimes](../../setup-pstack/references/runtimes.md) table gives the sheet path. Use the `Model` values listed in [Model names](#model-names). |
+| `setup-pstack` | `/setup-pstack` writes `.agents/pstack-models.md`. Use the `Model` values listed in [Model names](#model-names). |
 | `architect` | A large or contested design goes through the **arena** skill: one `invoke_subagent` call per runner, each with a `Model` from the sheet's `arena runners` line. |
 | `how` | The one read-only subagent maps to `invoke_subagent`. |
 | `arena` | The parallel candidates and the cross-judge map to `invoke_subagent` calls with the sheet's panel lines. |

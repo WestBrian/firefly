@@ -23,7 +23,7 @@ OpenCode 2 loads the native pstack plugin, which registers each skill as `pstack
 
 Claude Code model aliases are not OpenCode model IDs. Select a configured chat model only when the user explicitly asks for a model or variant; otherwise let the subagent inherit its model. OpenCode accepts `providerID/modelID` or `providerID/modelID#variant` in the `subagent` tool's `model` field. Look up the ID and variant with the `models` tool; do not guess.
 
-- The model sheet is `${XDG_CONFIG_HOME:-~/.config}/opencode/pstack-models.md`. Add that path to the OpenCode configuration's `instructions` array to load role choices; the plugin reads the `session hook` setting directly.
+- The model sheet is `.agents/pstack-models.md` at the repository root. Read it before role-model skills; the plugin reads the `session hook` setting from it.
 - For role-model skills (`arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos`), treat a saved user choice as an explicit instruction only when it identifies a configured model. The `subagent` input has no separate effort field; use a listed `#variant` when requested. Omit `model` for `inherit-parent` or `auto`.
 - For diverse-model panels, use different available providers only when the user requests those models. Otherwise inherit and state that model diversity was not established.
 

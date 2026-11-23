@@ -35,7 +35,7 @@ poteto-mode's Subagents section dispatches `subagent_type: "pstack:poteto-agent"
 
 Skills name Claude Code model aliases in their Models sections. Grok Build's available models depend on the user's configuration; do not pass a Claude alias as a Grok model.
 
-- The model sheet is `${GROK_HOME:-~/.grok}/pstack-models.md`. Before a skill that needs a role model (`arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos`), read it. With no sheet, use the runtime default; run `setup-pstack` only when the user asks to configure roles.
+- The model sheet is `.agents/pstack-models.md` at the repository root. Before a skill that needs a role model (`arena`, `interrogate`, `no-comments`, `poteto-mode`, `swarm`, `thermos`), read it. With no sheet, use the runtime default; run `setup-pstack` only when the user asks to configure roles.
 - The `spawn_subagent` tool says to omit `model` unless the user explicitly requests one. It has no effort parameter; when it cannot apply a sheet choice, report that limitation instead of claiming model diversity.
 - Roles that default to the worker model (`feature, refactoring`): the worker model the user chose.
 - Roles that default to the strongest model (`strongest judgment`): the strongest model the user chose.
