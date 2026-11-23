@@ -47,6 +47,11 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "convex/_generated/**",
+    // Agent skill/tooling trees (vendored scripts, not app source):
+    ".agents/**",
+    ".claude/**",
+    ".codex/**",
+    ".cursor/**",
   ]),
 ]);
 
