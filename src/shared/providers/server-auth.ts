@@ -1,9 +1,9 @@
 import { setupConvexAuthServer } from "@convex-dev/auth/ssr";
+import { env } from "@/env";
 import { api } from "../../../convex/_generated/api";
-import { convexUrl } from "./convex-url";
 
 export const auth = setupConvexAuthServer({
-  convexUrl,
+  convexUrl: env.NEXT_PUBLIC_CONVEX_URL,
   refreshSession: api.auth.refreshSession,
   signOut: api.auth.signOut,
   signIn: [
@@ -13,5 +13,5 @@ export const auth = setupConvexAuthServer({
     api.auth.finishSignInWithUsernamePasskey,
     api.auth.finishSignUpWithUsernamePasskey,
   ],
-  cookieOptions: { secure: process.env.NODE_ENV === "production" },
+  cookieOptions: { secure: env.NODE_ENV === "production" },
 });

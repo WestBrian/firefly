@@ -25,6 +25,21 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    files: ["src/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}"],
+    ignores: ["src/env.ts"],
+    rules: {
+      "no-restricted-properties": [
+        "error",
+        {
+          object: "process",
+          property: "env",
+          message:
+            "Declare the variable in src/env.ts and import env from @/env.",
+        },
+      ],
+    },
+  },
+  {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: { shadcn },
     rules: {
