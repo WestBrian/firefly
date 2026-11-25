@@ -34,7 +34,7 @@ type Env = {
   readonly PASSKEY_RP_ID: string | undefined;
   readonly RESEND_KEY: string;
   readonly SENDER_EMAIL: string;
-  readonly SENDER_NAME: string | undefined;
+  readonly SENDER_NAME: string;
   readonly SITE_URL: string;
 };
 

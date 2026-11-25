@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/shared/components/ui/card";
 import { isAuthenticatedNextjs } from "@/shared/providers/convex";
+import { APP_NAME } from "@/shared/lib/constants";
 
 // TODO(#11): Remove after upgrading to a Next.js release with the validation fix.
 export const instant = false;
@@ -23,7 +24,9 @@ export default async function Dashboard() {
             <span className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground">
               <IconChartLine aria-hidden="true" className="size-4" />
             </span>
-            <span className="font-heading text-lg font-semibold">Firefly</span>
+            <span className="font-heading text-lg font-semibold">
+              {APP_NAME}
+            </span>
           </div>
           <SignOutButton />
         </div>

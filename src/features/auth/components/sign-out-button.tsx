@@ -16,7 +16,6 @@ export function SignOutButton() {
     setPending(true);
     setFailed(false);
     try {
-      // Confirm the cookie-backed sign-out before the client clears its local state.
       const response = await fetch("/auth/signout", { method: "POST" });
       if (!response.ok) throw new Error("Sign-out request failed.");
       await signOut();

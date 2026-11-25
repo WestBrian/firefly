@@ -2,6 +2,7 @@ import { IconChartLine } from "@tabler/icons-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { SignIn } from "@/features/auth/components/sign-in";
+import { APP_NAME } from "@/shared/lib/constants";
 import { isAuthenticatedNextjs } from "@/shared/providers/convex";
 import portfolioIllustration from "./portfolio-illustration.webp";
 
@@ -19,7 +20,7 @@ export default async function Home() {
             <IconChartLine aria-hidden="true" className="size-5" />
           </span>
           <span className="font-heading text-xl font-semibold tracking-tight">
-            Firefly
+            {APP_NAME}
           </span>
         </header>
 

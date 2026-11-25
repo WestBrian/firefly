@@ -14,6 +14,7 @@ import {
 } from "@/shared/components/ui/card";
 import { Separator } from "@/shared/components/ui/separator";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { APP_NAME } from "@/shared/lib/constants";
 import { AnimatedAuthPanel } from "./animated-auth-panel";
 import { EmailSignInForm } from "./email-sign-in-form";
 import { EmailSignUpForm } from "./email-sign-up-form";
@@ -103,7 +104,7 @@ function SignInCard() {
           <IconChartLine aria-hidden="true" className="size-5" />
         </div>
         <CardTitle>
-          <h2>Welcome to Firefly</h2>
+          <h2>Welcome to {APP_NAME}</h2>
         </CardTitle>
         <CardDescription>Sign in or create your account.</CardDescription>
       </CardHeader>

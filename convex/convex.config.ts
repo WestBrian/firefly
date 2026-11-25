@@ -14,7 +14,7 @@ const app = defineApp({
     SITE_URL: v.string(),
     RESEND_KEY: v.string(),
     SENDER_EMAIL: v.string(),
-    SENDER_NAME: v.optional(v.string()),
+    SENDER_NAME: v.string(),
   },
 });
 

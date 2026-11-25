@@ -180,7 +180,7 @@ try {
   const settingsFile = join(project, ".env.e2e");
   await writeFile(
     settingsFile,
-    `SITE_URL=${appUrl}\nRESEND_KEY=re_local_test\nSENDER_EMAIL=auth@example.test\n`,
+    `SITE_URL=${appUrl}\nRESEND_KEY=re_local_test\nSENDER_EMAIL=auth@example.test\nSENDER_NAME=Firefly Test\n`,
   );
 
   convex = start(
