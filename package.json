@@ -7,6 +7,7 @@
     "dev:local": "convex deployment select local && convex dev --start 'next dev'",
     "build": "next build",
     "start": "next start",
+    "test:e2e": "node scripts/test-e2e.mts",
     "lint": "ls-lint && eslint",
     "fallow": "fallow",
     "format": "prettier --write .",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^2.3.2",
+    "@playwright/test": "^1.65.1",
     "@shadcn/lint": "^0.2.5",
     "@tailwindcss/turbopack": "4.3.3",
     "@types/node": "^20",

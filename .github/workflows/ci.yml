@@ -45,3 +45,9 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
           # The client requires a URL during prerendering. CI uses a reserved domain.
           NEXT_PUBLIC_CONVEX_URL: https://ci.example.invalid
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run sign-in tests
+        run: npm run test:e2e
