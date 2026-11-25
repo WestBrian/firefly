@@ -1,7 +1,8 @@
 import "./globals.css";
 import { Inter, Geist_Mono } from "next/font/google";
 import { cn } from "@/shared/lib/utils";
-import { ConvexClientProvider } from "@/shared/providers/convex";
+import { Suspense } from "react";
+import { ConvexAuthNextjsServerProvider } from "@/shared/providers/convex";
 
 const geistMonoHeading = Geist_Mono({
   subsets: ["latin"],
@@ -17,7 +18,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("font-sans", inter.variable, geistMonoHeading.variable)}
     >
       <body>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <Suspense>
+          <ConvexAuthNextjsServerProvider>
+            {children}
+          </ConvexAuthNextjsServerProvider>
+        </Suspense>
       </body>
     </html>
   );
