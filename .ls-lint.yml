@@ -1,0 +1,8 @@
+ls:
+  src/app:
+    .dir: "regex:!_(?s:.*)"
+
+ignore:
+  - .git
+  - .next
+  - node_modules
